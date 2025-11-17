@@ -1,0 +1,138 @@
+   <div class="employee-form-container">
+      <header class="page-header">
+        <h1>{{ isEditMode ? 'Edit Employee' : 'Add New Employee' }}</h1>
+        <div class="header-actions">
+          <button class="btn btn-outline" (click)="navigateToList()">
+            ← Back to List
+          </button>
+          <button class="btn btn-outline" (click)="logout()">Logout</button>
+        </div>
+      </header>
+
+      <div class="form-container">
+        <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input 
+                type="text" 
+                id="name" 
+                formControlName="name" 
+                class="form-control"
+                [class.is-invalid]="employeeForm.get('name')?.invalid && employeeForm.get('name')?.touched"
+                placeholder="Enter full name">
+              <div class="invalid-feedback" *ngIf="employeeForm.get('name')?.invalid && employeeForm.get('name')?.touched">
+                <div *ngIf="employeeForm.get('name')?.errors?.['required']">Name is required</div>
+                <div *ngIf="employeeForm.get('name')?.errors?.['minlength']">Name must be at least 2 characters</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input 
+                type="email" 
+                id="email" 
+                formControlName="email" 
+                class="form-control"
+                [class.is-invalid]="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched"
+                placeholder="Enter email address">
+              <div class="invalid-feedback" *ngIf="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched">
+                <div *ngIf="employeeForm.get('email')?.errors?.['required']">Email is required</div>
+                <div *ngIf="employeeForm.get('email')?.errors?.['email']">Please enter a valid email</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="department">Department *</label>
+              <select 
+                id="department" 
+                formControlName="department" 
+                class="form-control"
+                [class.is-invalid]="employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched">
+                <option value="">Select Department</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Sales">Sales</option>
+                <option value="HR">Human Resources</option>
+                <option value="Finance">Finance</option>
+                <option value="Operations">Operations</option>
+                <option value="Customer Service">Customer Service</option>
+              </select>
+              <div class="invalid-feedback" *ngIf="employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched">
+                Department is required
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="position">Position *</label>
+              <input 
+                type="text" 
+                id="position" 
+                formControlName="position" 
+                class="form-control"
+                [class.is-invalid]="employeeForm.get('position')?.invalid && employeeForm.get('position')?.touched"
+                placeholder="Enter job position">
+              <div class="invalid-feedback" *ngIf="employeeForm.get('position')?.invalid && employeeForm.get('position')?.touched">
+                <div *ngIf="employeeForm.get('position')?.errors?.['required']">Position is required</div>
+                <div *ngIf="employeeForm.get('position')?.errors?.['minlength']">Position must be at least 2 characters</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="salary">Salary *</label>
+              <input 
+                type="number" 
+                id="salary" 
+                formControlName="salary" 
+                class="form-control"
+                [class.is-invalid]="employeeForm.get('salary')?.invalid && employeeForm.get('salary')?.touched"
+                placeholder="Enter salary amount"
+                min="0"
+                step="0.01">
+              <div class="invalid-feedback" *ngIf="employeeForm.get('salary')?.invalid && employeeForm.get('salary')?.touched">
+                <div *ngIf="employeeForm.get('salary')?.errors?.['required']">Salary is required</div>
+                <div *ngIf="employeeForm.get('salary')?.errors?.['min']">Salary must be greater than 0</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="hireDate">Hire Date *</label>
+              <input 
+                type="date" 
+                id="hireDate" 
+                formControlName="hireDate" 
+                class="form-control"
+                [class.is-invalid]="employeeForm.get('hireDate')?.invalid && employeeForm.get('hireDate')?.touched">
+              <div class="invalid-feedback" *ngIf="employeeForm.get('hireDate')?.invalid && employeeForm.get('hireDate')?.touched">
+                Hire date is required
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="employeeForm.invalid || loading">
+              <span *ngIf="loading" class="spinner"></span>
+              {{ loading ? 'Saving...' : (isEditMode ? 'Update Employee' : 'Add Employee') }}
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-outline" 
+              (click)="navigateToList()"
+              [disabled]="loading">
+              Cancel
+            </button>
+          </div>
+
+          <div class="alert alert-danger" *ngIf="error">
+            {{ error }}
+          </div>
+
+          <div class="alert alert-success" *ngIf="success">
+            {{ success }}
+          </div>
+        </form>
+      </div>
+    </div>

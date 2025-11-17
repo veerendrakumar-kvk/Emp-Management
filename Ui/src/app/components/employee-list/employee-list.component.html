@@ -1,0 +1,141 @@
+<div class="employee-list-container">
+      <header class="page-header">
+        <h1>Employee Management</h1>
+        <div class="header-actions">
+          <button class="btn btn-primary" (click)="navigateToAdd()">
+              Add Employee
+          </button>
+          <button class="btn btn-outline" (click)="navigateToDashboard()">
+              Dashboard
+          </button>
+          <button class="btn btn-outline" (click)="logout()">Logout</button>
+        </div>
+      </header>
+
+      <div class="search-section">
+        <div class="search-controls">
+          <input
+            type="text"
+            [(ngModel)]="searchKeyword"
+            (keyup.enter)="search()"
+            placeholder="Search employees by name, email, department, or position..."
+            class="search-input">
+          <button class="btn btn-secondary" (click)="search()"> Search</button>
+          <button class="btn btn-outline" (click)="clearSearch()" *ngIf="searchKeyword">Clear</button>
+        </div>
+        
+        <div class="sort-controls">
+          <label>Sort by:</label>
+          <select [(ngModel)]="sortBy" (change)="loadEmployees()" class="sort-select">
+            <option value="id">ID</option>
+            <option value="name">Name</option>
+            <option value="email">Email</option>
+            <option value="department">Department</option>
+            <option value="position">Position</option>
+            <option value="salary">Salary</option>
+            <option value="hireDate">Hire Date</option>
+          </select>
+          
+          <select [(ngModel)]="sortDirection" (change)="loadEmployees()" class="sort-select">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-container" *ngIf="!loading">
+        <table class="employee-table" *ngIf="employees.length > 0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Department</th>
+              <th>Position</th>
+              <th>Salary</th>
+              <th>Hire Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let employee of employees">
+              <td>{{ employee.id }}</td>
+              <td>{{ employee.name }}</td>
+              <td>{{ employee.email }}</td>
+              <td>{{ employee.department }}</td>
+              <td>{{ employee.position }}</td>
+              <td>{{ employee.salary | currency }}</td>
+              <td>{{ employee.hireDate | date }}</td>
+              <td class="actions">
+                <button class="btn btn-sm btn-primary" (click)="editEmployee(employee.id!)">
+                    Edit
+                </button>
+                <button class="btn btn-sm btn-danger" (click)="deleteEmployee(employee.id!, employee.name)">
+                    Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="no-data" *ngIf="employees.length === 0">
+          <p>No employees found.</p>
+          <button class="btn btn-primary" (click)="navigateToAdd()">Add First Employee</button>
+        </div>
+      </div>
+
+      <div class="loading" *ngIf="loading">
+        <div class="spinner"></div>
+        <p>Loading employees...</p>
+      </div>
+
+      <div class="pagination" *ngIf="pagedResponse && pagedResponse.totalPages > 1">
+        <div class="pagination-info">
+          Showing {{ (pagedResponse.number * pagedResponse.size) + 1 }} to 
+          {{ Math.min((pagedResponse.number + 1) * pagedResponse.size, pagedResponse.totalElements) }} 
+          of {{ pagedResponse.totalElements }} employees
+        </div>
+        
+        <div class="pagination-controls">
+          <button 
+            class="btn btn-outline btn-sm" 
+            (click)="goToPage(0)" 
+            [disabled]="pagedResponse.first">
+            First
+          </button>
+          <button 
+            class="btn btn-outline btn-sm" 
+            (click)="goToPage(currentPage - 1)" 
+            [disabled]="pagedResponse.first">
+            Previous
+          </button>
+          
+          <span class="page-info">
+            Page {{ pagedResponse.number + 1 }} of {{ pagedResponse.totalPages }}
+          </span>
+          
+          <button 
+            class="btn btn-outline btn-sm" 
+            (click)="goToPage(currentPage + 1)" 
+            [disabled]="pagedResponse.last">
+            Next
+          </button>
+          <button 
+            class="btn btn-outline btn-sm" 
+            (click)="goToPage(pagedResponse.totalPages - 1)" 
+            [disabled]="pagedResponse.last">
+            Last
+          </button>
+        </div>
+        
+        <div class="page-size-controls">
+          <label>Items per page:</label>
+          <select [(ngModel)]="pageSize" (change)="changePageSize()" class="page-size-select">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+      </div>
+    </div>

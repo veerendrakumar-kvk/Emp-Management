@@ -1,0 +1,23 @@
+    <div class="dashboard-container">
+      <header class="dashboard-header">
+        <h1>Employee Dashboard</h1>
+        <div class="header-actions">
+          <span class="welcome-text">Welcome, {{ currentUser?.user?.username }}!</span>
+          <button class="btn btn-outline" (click)="logout()">Logout</button>
+        </div>
+      </header>
+
+      
+
+      <div class="quick-actions">
+        <h2>List</h2>
+        <div class="action-buttons">
+          <button class="btn btn-primary" (click)="navigateToEmployees()">
+              View All Employees
+          </button>
+          <button class="btn btn-success" (click)="navigateToAddEmployee()">
+              Add New Employee
+          </button>
+        </div>
+      </div>
+    </div>
